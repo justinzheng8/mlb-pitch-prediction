@@ -1,39 +1,57 @@
-# Project Proposal: Predicting MLB Pitch Types
+# MLB Pitch Prediction Project Proposal
 
 ## Description of the Project
-This project will use pitch-by-pitch Major League Baseball (MLB) data to predict which type of pitch (fastball, slider, curveball, changeup, etc.) a pitcher is most likely to throw next. Anticipating pitch types is an important part of baseball strategy, and this project will explore whether machine learning models can accurately model a pitcher’s decision-making based on game context.
+Pitch selection is a critical strategic decision in baseball. Our project aims to build a machine learning system that predicts the type of pitch a pitcher will throw (e.g., fastball, slider, curveball) given contextual features such as the count, game situation, and pitcher identity. Accurate pitch prediction could provide valuable insights into pitcher behavior and strategy.
 
-## Goal(s)
-- **Primary Goal:** Build a machine learning model that predicts the next pitch type with accuracy significantly higher than a baseline predictor (e.g., always guessing the pitcher’s most frequently used pitch).
-- **Secondary Goals:**
-  - Determine which features (count, inning, pitcher tendencies, batter handedness) are most predictive of pitch choice.
-  - Visualize how pitch selection changes depending on game state and previous pitch sequences.
+## Goals
+- **Primary Goal:** Successfully predict the pitch type on a given pitch event.  
+- **Secondary Goal:** Compare the performance of a **universal model** (one model across all pitchers) versus **pitcher-specific models** (customized for individual pitchers).  
+- **Research Goal:** Identify which contextual variables (count, inning, score differential, base runners, etc.) most strongly influence pitch selection.
+
+This is framed as a **multi-class classification problem**, where the target variable is **pitch type**.
 
 ## Data Collection
-We will use **Statcast data**, which is publicly available from MLB’s Baseball Savant database. Data can be accessed programmatically using the `pybaseball` Python library. We will collect:
-- Pitch type (fastball, slider, etc.)
-- Count (balls and strikes)
-- Pitcher and batter IDs
-- Inning, outs, runners on base, and score differential
-- Previous pitch types in the at-bat
+We will use the [pybaseball](https://github.com/jldbc/pybaseball) Python package to collect Statcast data. This dataset provides pitch-level information such as pitch type, velocity, spin rate, pitcher, batter, game context, and outcomes.  
+
+- **Timeframe:** We plan to use a **single MLB season (2023)** for feasibility. If time and resources permit, we may expand to multiple seasons.  
+- **Data Volume Consideration:** A single season contains hundreds of thousands of pitch events, which should be sufficient for training but still computationally manageable.  
+- **Key Variables to Collect:**  
+  - **Predictors:** Count, inning, score differential, base runners, outs, pitcher ID, batter ID, handedness, velocity, spin rate, etc.  
+  - **Target:** Pitch type (multi-class label).  
 
 ## Modeling Plan
-This is a multiclass classification problem. Planned models include:
-- **Baseline Model:** Always predict the most common pitch type for a given pitcher.
-- **Machine Learning Models:** Decision Tree, Random Forest, and XGBoost to learn non-linear relationships between game context and pitch choice.
-- We may experiment with a simple neural network if time permits.
+This is a multi-class classification problem. Planned models include:  
+- **Baseline:** Always predict the most common pitch type for each pitcher.  
+- **Universal Model:** Train a single model across all pitchers to capture generalizable patterns.  
+- **Pitcher-Specific Models:** Compare performance by training models for individual pitchers with large enough sample sizes.  
+- **Machine Learning Models:** Decision Tree, Random Forest, and XGBoost to capture complex, non-linear relationships between features and pitch type.  
+- **Validation:** Use a separate validation set to tune hyperparameters and select models before final testing.  
+- If time permits, we may explore a simple neural network to model pitch sequences.
 
 ## Visualization Plan
-- Distribution of pitch types by count (heatmap).
-- Sankey diagram or bar chart showing most common pitch sequences.
-- Confusion matrix comparing predicted vs. actual pitch types.
-- Feature importance plots to show which factors most influence the prediction.
+We plan to use several visualizations to understand the data and results:  
+- Heatmaps of pitch type distributions by count and pitcher.  
+- Scatter plots of pitch velocity vs. spin rate, colored by pitch type.  
+- Interactive plots (e.g., Plotly) showing pitch distributions across game situations.  
+- Confusion matrices to visualize which pitch types are most frequently misclassified.  
+- Feature importance plots for tree-based models.  
 
 ## Test Plan
-We will split the dataset chronologically:
-- **Training Set:** Games from April–August.
-- **Test Set:** Games from September.
-This ensures that the model is evaluated on data from later in the season, simulating real-world prediction. We will evaluate model performance using:
-- Accuracy (overall correct predictions)
-- Macro F1 score (to avoid bias toward common pitch types)
-- Per-class recall (to measure performance on rare pitch types)
+We will split the dataset chronologically to mimic real-world prediction:  
+- **Training Set:** Games from April–July.  
+- **Validation Set:** Games from August (used for hyperparameter tuning and model selection).  
+- **Test Set:** Games from September (held out for final evaluation only).  
+
+This ensures that the model:  
+1. Learns from early-season data.  
+2. Is tuned using mid-season data.  
+3. Is evaluated on unseen late-season data, simulating real-world deployment.  
+
+We will evaluate performance using:  
+- **Accuracy:** Overall correctness.  
+- **Macro F1 Score:** To avoid bias toward common pitch types.  
+- **Per-Class Recall:** To evaluate rare pitch prediction.  
+
+If computation on the full season proves infeasible, we will sample subsets of pitchers or games while maintaining the same train/validation/test design.  
+
+---
