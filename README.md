@@ -61,7 +61,7 @@ For modeling purposes, the following columns were selected:
    - Found **17 unique pitch types**.
    - Most common pitch: **Four-seam fastball (FF)** with 230,309 occurrences.
 
-4. Preliminary Visualizations
+## 4. Preliminary Visualizations
 (1) Pitch Type Distribution
 
 This plot shows how frequently each pitch type appears. The dataset is dominated by fastballs (FF), followed by sliders (SL) and sinkers (SI).
@@ -90,7 +90,8 @@ A sample of 5,000 pitches was plotted to visualize the relationship between hori
 Interpretation:
 Distinct clusters emerge for different pitch types, suggesting that release mechanics play a key role in pitch classification.
 
-5. Modeling Methods
+## 5. Modeling Methods
+
 (a) Modeling Objective:
 The goal is to build a supervised classification model that predicts pitch_type based on contextual and physical features.
 
@@ -110,12 +111,14 @@ Baseline accuracy: 0.3209
 A model that always predicts “fastball” achieves 32.09% accuracy.
 This baseline provides a useful reference point — any model trained later (Decision Tree, Random Forest, XGBoost, etc.) should aim to outperform this benchmark significantly.
 
-6. Preliminary Results Summary
+## 6. Preliminary Results Summary
+   
 -The data is imbalanced, favoring fastballs, sliders, and sinkers.
 -Strong preliminary visual patterns suggest that release speed and release position are among the most discriminative features.
 -The baseline model provides a meaningful benchmark for evaluating future models.
 
-7. Next Steps
+## 7. Next Steps
+
 Feature Engineering"
 One-hot encode categorical variables (stand, p_throws).
 Possibly engineer interaction features (e.g., count-based pressure, previous pitch type).
@@ -133,7 +136,7 @@ Create confusion matrices and feature importance plots.
 Model Interpretation:
 Identify which features most influence pitch selection.
 
-8. Environment and Dependencies
+## 8. Environment and Dependencies
 -Language: Python 3.x
 -Environment: Google Colab
 
