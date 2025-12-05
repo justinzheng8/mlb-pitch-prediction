@@ -208,4 +208,4 @@ __marimo__/
 
 # Project local data and plots
 notebooks/data/*.csv
-notebooks/plots/
+notebooks/plots/*
