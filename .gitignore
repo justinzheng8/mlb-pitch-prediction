@@ -206,5 +206,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Project local data
-data/
+# Project local data and plots
+notebooks/data/
+notebooks/plots/
