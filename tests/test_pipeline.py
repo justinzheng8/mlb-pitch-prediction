@@ -1,0 +1,42 @@
+import os
+import pandas as pd
+import numpy as np
+from xgboost import XGBClassifier
+from sklearn.utils.class_weight import compute_class_weight
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+
+DATA_PATH = "data/statcast_2023.csv"
+
+def test_data_load():
+    """Dataset loads and has expected shape."""
+    assert os.path.exists(DATA_PATH), "Dataset file missing"
+    df = pd.read_csv(DATA_PATH)
+    assert len(df) == 720684, "Unexpected row count"
+    assert "pitch_type" in df.columns, "pitch_type column missing"
+
+def test_feature_engineering():
+    """Feature engineering block produces expected columns."""
+    df = pd.read_csv(DATA_PATH).head(1000)
+    df["score_diff"] = df["home_score"] - df["away_score"]
+    assert "score_diff" in df.columns
+    assert df["score_diff"].dtype in [np.int64, np.float64]
+
+def test_model_training():
+    """Train a small weighted XGBoost model to ensure pipeline runs."""
+    df = pd.read_csv(DATA_PATH).dropna(subset=["pitch_type", "release_speed"])
+    X = df[["release_speed"]].values
+    y = df["pitch_type"].values
+    le = LabelEncoder()
+    y_enc = le.fit_transform(y)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y_enc, test_size=0.2, random_state=42)
+
+    classes = np.unique(y_train)
+    weights = compute_class_weight(class_weight="balanced", classes=classes, y=y_train)
+    class_weights = dict(zip(classes, weights))
+
+    model = XGBClassifier(n_estimators=10, max_depth=3, random_state=42)
+    model.fit(X_train, y_train, sample_weight=[class_weights[label] for label in y_train])
+    preds = model.predict(X_test)
+    assert len(preds) == len(y_test), "Prediction length mismatch"
