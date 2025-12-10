@@ -13,3 +13,11 @@ dependencies:
   - imbalanced-learn
   - jupyter
   - pytest
+  - tensorflow
+  - pip
+  - pip:
+      - nbconvert
+      - pybaseball
+      - PyGithub
+      - PyJWT
+      - cryptography

@@ -7,23 +7,25 @@ ENV_NAME = mlb-pitch-prediction
 all: setup build test
 
 setup:
-    conda env create -f environment.yml || conda env update -f environment.yml
-    @echo "Environment $(ENV_NAME) created/updated."
+	conda env create -f environment.yml || conda env update -f environment.yml
+	@echo Environment $(ENV_NAME) created/updated.
 
 build:
-    @echo "Building project..."
-    @mkdir -p notebooks/plots
-    @echo "Project build complete."
+	@echo Building project...
+	@if not exist notebooks\plots mkdir notebooks\plots
+	@echo Project build complete.
 
 test:
-    pytest -v
+	pytest -v
 
 run:
-    jupyter nbconvert --execute --to html notebooks/data_collection+baseline_model_final.ipynb --output notebooks/data_collection+baseline_model_final.html
-    jupyter nbconvert --execute --to html notebooks/data_exploration_final.ipynb --output notebooks/data_exploration_final.html
-    jupyter nbconvert --execute --to html notebooks/feature_eng+modeling_final.ipynb --output notebooks/feature_eng+modeling_final.html
-    @echo "All notebooks executed and converted to HTML."
+	jupyter nbconvert --execute --to html notebooks/data_collection+baseline_model.ipynb --output data_collection+baseline_model.html
+	jupyter nbconvert --execute --to html notebooks/data_exploration.ipynb --output data_exploration.html
+	jupyter nbconvert --execute --to html notebooks/feature_eng+modeling.ipynb --output feature_eng+modeling.html
+	@echo All notebooks executed and converted to HTML.
 
 clean:
-    rm -rf notebooks/*.html notebooks/plots/*.png notebooks/plots/*.pdf
-    @echo "Cleaned generated files."
+	-del notebooks\*.html
+	-del notebooks\plots\*.png
+	-del notebooks\plots\*.pdf
+	@echo Cleaned generated files.
