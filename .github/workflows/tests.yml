@@ -27,4 +27,5 @@ jobs:
         conda list
 
     - name: Run tests
+      shell: bash -l {0}   # ensures login shell so conda env is active
       run: pytest -v
