@@ -19,7 +19,6 @@ jobs:
       with:
         activate-environment: mlb-pitch-prediction
         environment-file: environment.yml
-        python-version: 3.10
         auto-activate-base: false
 
     - name: Verify environment
