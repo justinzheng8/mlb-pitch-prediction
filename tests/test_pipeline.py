@@ -7,7 +7,7 @@ from sklearn.utils.class_weight import compute_class_weight
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-DATA_PATH = "data/statcast_2023.csv"
+DATA_PATH = os.path.join("notebooks", "data", "statcast_2023.csv")
 
 # Skip all tests if dataset is missing (e.g. in CI)
 skip_if_no_data = pytest.mark.skipif(
