@@ -12,7 +12,7 @@ dependencies:
   - matplotlib
   - imbalanced-learn
   - jupyter
-  -make
+  - make
   - pytest
   - tensorflow
   - pip
